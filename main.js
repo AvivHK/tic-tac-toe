@@ -4,56 +4,15 @@ function init() {
   let player;
   let game;
 
-  // const socket = io.connect('http://tic-tac-toe-realtime.herokuapp.com'),
   const socket = io.connect('http://localhost:3000');
 
-  class Player {
-    constructor(name, type) {
-      this.name = name;
-      this.type = type;
-      this.currentTurn = true;
-      this.playsArr = 0;
-    }
-
-    // Set the bit of the move played by the player
-    // tileValue - Bitmask used to set the recently played move.
-    updatePlaysArr(tileValue) {
-      this.playsArr += tileValue;
-    }
-
-    getPlaysArr() {
-      return this.playsArr;
-    }
-
-    // Set the currentTurn for player to turn and update UI to reflect the same.
-    setCurrentTurn(turn) {
-      this.currentTurn = turn;
-      const message = turn ? 'Your turn' : 'Waiting for Opponent';
-      $('#turn').text(message);
-    }
-
-    getPlayerName() {
-      return this.name;
-    }
-
-    getPlayerType() {
-      return this.type;
-    }
-
-    getCurrentTurn() {
-      return this.currentTurn;
-    }
-  }
-
-  // roomId Id of the room in which the game is running on the server.
-  class Game {
+    class Game {
     constructor(roomId) {
       this.roomId = roomId;
       this.board = [];
       this.moves = 0;
     }
 
-    // Create the Game board by attaching event listeners to the buttons.
     createGameBoard() {
       function tileClickHandler() {
         const row = parseInt(this.id.split('_')[1][0], 10);
@@ -67,7 +26,6 @@ function init() {
           return;
         }
 
-        // Update board after your turn.
         game.playTurn(this);
         game.updateBoard(player.getPlayerType(), row, col, this.id);
 
@@ -82,7 +40,7 @@ function init() {
         }
       }
     }
-    // Remove the menu from DOM, display the gameboard and greet the player.
+
     displayBoard(message) {
       $('.menu').css('display', 'none');
       $('.gameBoard').css('display', 'block');
@@ -100,25 +58,21 @@ function init() {
       return this.roomId;
     }
 
-    // Send an update to the opponent to update their UI's tile
     playTurn(tile) {
       const clickedTile = $(tile).attr('id');
 
-      // Emit an event to update other player that you've played your turn.
       socket.emit('playTurn', {
         tile: clickedTile,
         room: this.getRoomId(),
       });
     }
     
-    // End the game if the other player won.
     endGame(message) {
       alert(message);
       location.reload();
     }
   }
 
-  // Create a new game. Emit newGame event.
   $('#new').on('click', () => {
     const name = $('#nameNew').val();
     if (!name) {
@@ -129,7 +83,6 @@ function init() {
     player = new Player(name, P1);
   });
 
-  // Join an existing game on the entered roomId. Emit the joinGame event.
   $('#join').on('click', () => {
     const name = $('#nameJoin').val();
     const roomID = $('#room').val();
@@ -141,44 +94,32 @@ function init() {
     player = new Player(name, P2);
   });
 
-  // New Game created by current client. Update the UI and create new Game var.
   socket.on('newGame', (data) => {
     const message =
       `Hello, ${data.name}. Please ask your friend to enter Game ID: 
         ${data.room}. Waiting for player 2...`;
 
-    // Create game for player 1
     game = new Game(data.room);
     game.displayBoard(message);
   });
 
-  /**
-     * If player creates the game, he'll be P1(X) and has the first turn.
-     * This event is received when opponent connects to the room.
-     */
+
   socket.on('player1', (data) => {
     const message = `Hello, ${player.getPlayerName()}`;
     $('#userHello').html(message);
     player.setCurrentTurn(true);
   });
 
-  /**
-     * Joined the game, so player is P2(O). 
-     * This event is received when P2 successfully joins the game room. 
-     */
+
   socket.on('player2', (data) => {
     const message = `Hello, ${data.name}`;
 
-    // Create game for player 2
     game = new Game(data.room);
     game.displayBoard(message);
     player.setCurrentTurn(false);
   });
 
-  /**
-     * Opponent played his turn. Update UI.
-     * Allow the current player to play now. 
-     */
+
   socket.on('turnPlayed', (data) => {
     const row = data.tile.split('_')[1][0];
     const col = data.tile.split('_')[1][1];
@@ -188,15 +129,11 @@ function init() {
     player.setCurrentTurn(true);
   });
 
-  // If the other player wins, this event is received. Notify user game has ended.
   socket.on('gameEnd', (data) => {
     game.endGame(data.message);
     socket.leave(data.room);
   });
 
-  /**
-     * End the game on any err event. 
-     */
   socket.on('err', (data) => {
     game.endGame(data.message);
   });
