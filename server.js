@@ -1,6 +1,5 @@
-const express = require('express');
+const express = require('express')
 const path = require('path');
-
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -14,16 +13,17 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-
+    console.log('A user connected!'); // We'll replace this with our own events
     // Create a new game room and notify the creator of game.
-    socket.on('createGame', (data) => {
-        socket.join(`room-${++rooms}`);
-        socket.emit('newGame', { name: data.name, room: `room-${rooms}` });
-    });
 
+    socket.on('createGame', (data) => {
+        socket.join(`${++rooms}`);
+        socket.emit('newGame', { name: data.name, room: `${rooms}` });
+    });
     // Connect the Player 2 to the room he requested. Show error if room full.
     socket.on('joinGame', function (data) {
-        var room = io.nsps['/'].adapter.rooms[data.room];
+        let room = io.nsps['/'].adapter.rooms[data.room];
+        //console.log(room);
         if (room && room.length === 1) {
             socket.join(data.room);
             socket.broadcast.to(data.room).emit('player1', {});
