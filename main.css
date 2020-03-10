@@ -3,6 +3,9 @@
 	height: 80px;
 	font-size: 60px;
 	font-family: Helvetica;
+	position: relative;
+	left:20px;
+	text-align: center;
 }
 
 .gameBoard{
@@ -10,5 +13,49 @@
 }
 
 .center{
-	margin: 0 auto;
+	margin: 0 auto
+}
+
+.container {
+	font-family: 'Pacifico', cursive;
+}
+
+#TTT {
+ color:  rgb(3, 116, 116);
+}
+
+#HTP {
+color: cadetblue;
+}
+
+.ol {
+	color: rgba(95, 158, 160, 0.884);
+}
+
+.h4 {
+	color: cadetblue;	
+}
+
+body {
+	background-color: rgba(238, 235, 235, 0.795);
+}
+
+#nameNew {
+	background-color: rgba(255, 255, 255, 0.418);
+	font-family: 'Pacifico', cursive;
+}
+
+#nameJoin {
+	background-color: rgba(255, 255, 255, 0.418);
+	font-family: 'Pacifico', cursive;
+}
+
+#room {
+	background-color: rgba(255, 255, 255, 0.418);
+	font-family: 'Pacifico', cursive;
+}
+
+button {
+	background-color: rgba(255, 255, 255, 0.418);
+	font-family: 'Pacifico', cursive;
 }

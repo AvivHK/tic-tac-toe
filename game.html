@@ -4,22 +4,23 @@
 		<title>Tic Tac Toe</title>
 		<link rel="stylesheet" href="main.css">
 		<link rel="stylesheet" href="node_modules/skeleton-css/css/skeleton.css">
+		<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container">
 			<div class="menu">
-				<h1>Tic - Tac - Toe</h1>
-				<h3>How To Play</h3>
-				<ol>
+				<h1 id="TTT">Tic Tac Toe</h1>
+				<h3 id="HTP">How To Play</h3>
+				<ol class="ol">
 					<li>Player 1 Create a new game by entering the username</li>
 					<li>Player 2 Enter another username and the room id that is displayed on first window.</li>
 					<li>Click on join game. </li>
 				</ol>
-				<h4>Create a new Game</h4>
+				<h4 class="h4">Create a new Game</h4>
 				<input type="text" name="name" id="nameNew" placeholder="Enter your name" required>
 				<button id="new">New Game</button>
 				<br><br>
-				<h4>Join an existing game</h4>
+				<h4 class="h4">Join an existing game</h4>
 				<input type="text" name="name" id="nameJoin" placeholder="Enter your name" required>
 				<input type="text" name="room" id="room" placeholder="Enter Game ID" required>
 				<button id="join">Join Game</button>
@@ -46,10 +47,10 @@
 				</table>
 			</div>
 		</div>
+
+		<script src="Classes/Player.js"></script>
 		<script src="node_modules/jquery/dist/jquery.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="Classes/Game.js"></script>
-		<script src="Classes/Player.js"></script>
 		<script src="main.js"></script>
 	</body>
 </html>
